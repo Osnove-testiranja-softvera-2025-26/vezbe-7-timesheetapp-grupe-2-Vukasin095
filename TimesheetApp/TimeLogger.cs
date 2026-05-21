@@ -17,13 +17,28 @@ namespace TimesheetApp
         IUserLogger userLogger;
         ITaskManager taskManager;
 
+        // Default constructor keeps existing behavior
         public TimeLogger()
         {
-            task = new TaskLogger();
-            emailSender = new EmailSender();
-            errorLogger = new ErrorLogger();
-            userLogger = new UserLogger();
-            taskManager = new TaskManager();
+            task = new DBAccess.TaskLogger();
+            emailSender = new Util.EmailSender();
+            errorLogger = new Util.ErrorLogger();
+            userLogger = new Util.UserLogger();
+            taskManager = new Util.TaskManager();
+        }
+
+        // Constructor for dependency injection - used in unit tests to provide fakes/mocks
+        public TimeLogger(ITask task,
+                          IEmailSender emailSender,
+                          IErrorLogger errorLogger,
+                          IUserLogger userLogger,
+                          ITaskManager taskManager)
+        {
+            this.task = task;
+            this.emailSender = emailSender;
+            this.errorLogger = errorLogger;
+            this.userLogger = userLogger;
+            this.taskManager = taskManager;
         }
 
         public void LogTime(int hours, int minutes, string description)
